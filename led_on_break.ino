@@ -44,6 +44,10 @@ void loop() {
   if (digitalRead(PIN_BUTTON) == LOW) {
     restartGame();
   }
+
+  if (isLedOn && currentMillis - previousMillisLed >= INTERVAL_LED) {
+    ledOff();
+  }
     
   if (isGameOn && minutes == 0 && seconds == 0) {
       finishGame();
@@ -53,10 +57,6 @@ void loop() {
     previousMillisTimer = currentMillis;
 
     decreaseTimer();
-  }
-
-  if (isGameOn && isLedOn && currentMillis - previousMillisLed >= INTERVAL_LED) {
-    ledOff();
   }
 
   if (isGameOn && !isLedOn && digitalRead(PIN_HOME_GOAL) == LOW) {
@@ -123,6 +123,7 @@ void ledOff() {
 
 void restartGame() {
   resetScoreAndTime();
+  ledOff();
   int melody[] = {
     NOTE_AS3, NOTE_F3, NOTE_G3, NOTE_A3,
     NOTE_B3, NOTE_FS3, NOTE_GS3, NOTE_AS3,
