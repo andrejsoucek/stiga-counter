@@ -12,7 +12,7 @@ const int PIN_HOME_GOAL = 3;
 const int PIN_AWAY_LED = 10;
 const int PIN_AWAY_GOAL = 4;
 
-const int INTERVAL_LED = 5000;
+const int INTERVAL_LED = 3000;
 
 unsigned int goalsHome = 0;
 unsigned int goalsAway = 0;
@@ -31,7 +31,7 @@ void setup() {
   pinMode(PIN_HOME_LED, OUTPUT);
   pinMode(PIN_HOME_GOAL, INPUT);
   pinMode(PIN_AWAY_LED, OUTPUT);
-  //pinMode(PIN_AWAY_GOAL, OUTPUT);
+  pinMode(PIN_AWAY_GOAL, OUTPUT);
 
   Serial.begin(9600);
 
@@ -43,6 +43,10 @@ void loop() {
 
   if (digitalRead(PIN_BUTTON) == LOW) {
     restartGame();
+  }
+    
+  if (isGameOn && minutes == 0 && seconds == 0) {
+      finishGame();
   }
 
   if (isGameOn && (currentMillis - previousMillisTimer >= 1000)) {
@@ -60,10 +64,10 @@ void loop() {
     previousMillisLed = currentMillis;
   }
 
-  //if (isGameOn && !isLedOn && digitalRead(PIN_AWAY_GOAL) == LOW) {
-  //  scoreAway();
-  //  previousMillisLed = currentMillis;
-  //}
+  if (isGameOn && !isLedOn && digitalRead(PIN_AWAY_GOAL) == LOW) {
+    scoreAway();
+    previousMillisLed = currentMillis;
+  }
 }
 
 void initLcd() {
@@ -76,10 +80,11 @@ void decreaseTimer() {
   seconds--;
   if (seconds < 0) {
     minutes--;
-    if (minutes <= 0) {
-      minutes = 4;
-    }
     seconds = 59;
+    if (minutes < 0) {
+      minutes = 0;
+      seconds = 0;
+    }
   }
   lcd.setCursor(11, 1);
   lcd.print(minutes);
@@ -154,4 +159,15 @@ void resetScoreAndTime() {
   lcd.print("CAS:");
   lcd.setCursor(10, 1);
   lcd.print("05:00");
+}
+
+void finishGame() {
+  isGameOn = false;
+  ledOff();
+  tone(8, NOTE_AS3, 500);
+  delay(1000);
+  tone(8, NOTE_AS3, 500);
+  delay(1000);
+  tone(8, NOTE_AS3, 500);
+  delay(1000);
 }
