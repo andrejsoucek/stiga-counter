@@ -33,8 +33,6 @@ void setup() {
   pinMode(PIN_AWAY_LED, OUTPUT);
   pinMode(PIN_AWAY_GOAL, OUTPUT);
 
-  Serial.begin(9600);
-
   initLcd();
 }
 
