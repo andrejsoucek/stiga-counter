@@ -31,7 +31,7 @@ void setup() {
   pinMode(PIN_HOME_LED, OUTPUT);
   pinMode(PIN_HOME_GOAL, INPUT);
   pinMode(PIN_AWAY_LED, OUTPUT);
-  pinMode(PIN_AWAY_GOAL, OUTPUT);
+  pinMode(PIN_AWAY_GOAL, INPUT);
 
   initLcd();
 }
